@@ -1,0 +1,58 @@
+server:
+  port: 8443
+  ssl:
+    # The format used for the keystore. It could be set to JKS in case it is a JKS file
+    keyStoreType: PKCS12
+    # The path to the keystore containing the certificate (filename: keystore.p12)
+    key-store: [path to the keystore]
+    # The password used to generate the certificate
+    key-store-password: password
+    # The alias mapped to the certificate
+    keyAlias: jsutforlulz-tomcat
+security:
+  require-ssl: true
+spring:
+  datasource:
+    url: jdbc:h2:mem:demoDB;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE;
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+    initialization-mode: always
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: [google client id (get your own)]
+            clientSecret: [google client sectret (get your own)]
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: trace
+      springframework:
+        security:
+          oauth2: trace
+          jwt: INFO
+app:
+  auth:
+    tokenSecret: [tokent secret]
+    tokenExpirationMsec: [tokent lifetime]
+  oauth2:
+    authorizedRedirectUris:
+      - https://justforlulz.tk
+      # for debug
+      - https://localhost:8443
